@@ -120,33 +120,8 @@
 	"users": [
 	  {
 		"email": "tuanpha.it@gmail.com",
-		"password": "$2a$10$Zvhl4zXM7olPDGNZHteXUet5vE46VGthjoWESj/iWgIIAW8Vnr1R.",
+		"password": "admin@123",
 		"id": 1
-	  },
-	  {
-		"email": "tuanpha.it1@gmail.com",
-		"password": "$2a$10$qmN62f9v7HBS3o6cXpezj.xOYYrAiz8MPG3dvBnDS7pJah8OEDaUC",
-		"id": 2
-	  },
-	  {
-		"email": "tuanpha.it3@gmail.com",
-		"password": "$2a$10$dfk2LTnNBXfC7TkEg7Fs..FztvY7joqX4cDyHNDjf3nsKflCYO.CS",
-		"id": 3
-	  },
-	  {
-		"email": "tuanpha.it4@gmail.com",
-		"password": "$2a$10$IyMc41F5ZOLoy.c3y9c00uW9zpW4DJMBxlCD5.jYWSRJhrCABsB4q",
-		"id": 4
-	  },
-	  {
-		"email": "tuanpha.it5@gmail.com",
-		"password": "$2a$10$S04PMn1RPAz6CRXaa3wu.OTcNytsNWNT9nyNub2kNpQaMAll.UYk2",
-		"id": 5
-	  },
-	  {
-		"email": "tuanpha.it6@gmail.com",
-		"password": "$2a$10$hoHKbcM.89N1jbKUF5BQ3.bW/bPC2JB6cr9yKi.mUlaL7gxixUlkG",
-		"id": 6
 	  }
 	]
   }
