@@ -14,7 +14,6 @@ const corsOptions = {
 };
 
 const router = jsonServer.router('./db.json');
-const userdb = JSON.parse(fs.readFileSync('./db.json', 'UTF-8'));
 
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(bodyParser.json());
@@ -38,6 +37,8 @@ function verifyToken(token) {
 
 // Check if the user exists in database
 function isAuthenticated({ email, password }) {
+	const userdb = JSON.parse(fs.readFileSync('./db.json', 'UTF-8'));
+
 	return (
 		userdb.users.findIndex(
 			(user) => user.email === email && user.password === password
@@ -86,24 +87,20 @@ server.post('/register', (req, res) => {
 			firstname,
 			lastname,
 		}); //add some data
-		var writeData = fs.writeFile(
-			'./db.json',
-			JSON.stringify(data),
-			(err, result) => {
-				// WRITE
-				if (err) {
-					const status = 401;
-					const message = err;
-					res.status(status).json({ status, message });
-					return;
-				}
+		fs.writeFile('./db.json', JSON.stringify(data), (err, result) => {
+			// WRITE
+			if (err) {
+				const status = 401;
+				const message = err;
+				res.status(status).json({ status, message });
+				return;
 			}
-		);
+		});
 	});
 
 	// Create token for new user
 	const accessToken = createToken({ email, password });
-	const newUser = userdb.users.find((user) => user.email === email);
+	const newUser = data.users.find((user) => user.email === email);
 	res.status(200).json({
 		accessToken,
 		user: omit(['password'], newUser),
@@ -112,14 +109,17 @@ server.post('/register', (req, res) => {
 
 // Login to one of the users from ./db.json
 server.post('/login', (req, res) => {
+	const userdb = JSON.parse(fs.readFileSync('./db.json', 'UTF-8'));
+	const newUser = userdb.users.find((user) => user.email === email);
+
 	const { email, password } = req.body;
-	if (isAuthenticated({ email, password }) === false) {
+	if (!newUser) {
 		const status = 401;
 		const message = 'Incorrect email or password';
 		res.status(status).json({ status, message });
 		return;
 	}
-	const newUser = userdb.users.find((user) => user.email === email);
+
 	const accessToken = createToken({ email, password });
 	res.status(200).json({
 		accessToken,
