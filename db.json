@@ -121,11 +121,15 @@
 		{
 			"email": "user@code4change.dev",
 			"password": "code4change",
+			"firstname": "Code4Change",
+			"lastname": "Team",
 			"id": 1
 		},
 		{
 			"email": "tuanpha.it@gmail.com",
 			"password": "admin@123",
+			"firstname": "Tuan",
+			"lastname": "Pham",
 			"id": 2
 		}
 	]

@@ -55,7 +55,7 @@ function isAuthenticated({ email, password }) {
 const middlewares = jsonServer.defaults();
 // Register New User
 server.post('/register', (req, res) => {
-	const { email, password } = req.body;
+	const { email, password, firstname, lastname } = req.body;
 
 	if (isAuthenticated({ email, password }) === true) {
 		const status = 401;
@@ -81,8 +81,10 @@ server.post('/register', (req, res) => {
 		//Add new user
 		data.users.push({
 			id: last_item_id + 1,
-			email: email,
-			password: password,
+			email,
+			password,
+			firstname,
+			lastname,
 		}); //add some data
 		var writeData = fs.writeFile(
 			'./db.json',
