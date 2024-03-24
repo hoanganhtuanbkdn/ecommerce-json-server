@@ -57,51 +57,41 @@ const middlewares = jsonServer.defaults();
 // Register New User
 server.post('/register', (req, res) => {
 	const { email, password, firstname, lastname } = req.body;
+	const data = JSON.parse(fs.readFileSync('./db.json', 'UTF-8'));
+	const targetUser = data.users.find((user) => user.email === email);
 
-	if (isAuthenticated({ email, password }) === true) {
+	if (targetUser) {
 		const status = 401;
 		const message = 'Email and Password already exist';
-		res.status(status).json({ status, message });
+		res.status(status).json(message);
 		return;
 	}
 
-	fs.readFile('./db.json', (err, data) => {
+	// Get the id of last user
+	var last_item_id = data.users[data.users.length - 1].id;
+
+	//Add new user
+	data.users.push({
+		id: last_item_id + 1,
+		email,
+		password,
+		firstname,
+		lastname,
+	}); //add some data
+	fs.writeFile('./db.json', JSON.stringify(data), (err, result) => {
+		// WRITE
 		if (err) {
 			const status = 401;
 			const message = err;
-			res.status(status).json({ status, message });
+			res.status(status).json(err);
 			return;
 		}
-
-		// Get current users data
-		var data = JSON.parse(data.toString());
-
-		// Get the id of last user
-		var last_item_id = data.users[data.users.length - 1].id;
-
-		//Add new user
-		data.users.push({
-			id: last_item_id + 1,
-			email,
-			password,
-			firstname,
-			lastname,
-		}); //add some data
-		fs.writeFile('./db.json', JSON.stringify(data), (err, result) => {
-			// WRITE
-			if (err) {
-				const status = 401;
-				const message = err;
-				res.status(status).json({ status, message });
-				return;
-			}
-		});
 	});
 
 	// Create token for new user
 	const accessToken = createToken({ email, password });
 	const newUser = data.users.find((user) => user.email === email);
-	res.status(200).json({
+	res.status(201).json({
 		accessToken,
 		user: omit(['password'], newUser),
 	});
