@@ -11,6 +11,7 @@
     "cors": "^2.8.5",
     "fs": "^0.0.1-security",
     "json-server": "^0.17.4",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "ramda": "^0.29.1"
   }
 }

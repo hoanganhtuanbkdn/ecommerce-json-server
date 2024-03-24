@@ -6,6 +6,7 @@ const server = jsonServer.create();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const { omit } = require('ramda');
 const corsOptions = {
 	origin: '*',
 	credentials: true, //access-control-allow-credentials:true
@@ -100,12 +101,10 @@ server.post('/register', (req, res) => {
 
 	// Create token for new user
 	const accessToken = createToken({ email, password });
+	const newUser = userdb.users.find((user) => user.email === email);
 	res.status(200).json({
 		accessToken,
-		user: {
-			email,
-			id: 1,
-		},
+		user: omit(['password'], newUser),
 	});
 });
 
@@ -118,14 +117,11 @@ server.post('/login', (req, res) => {
 		res.status(status).json({ status, message });
 		return;
 	}
-
+	const newUser = userdb.users.find((user) => user.email === email);
 	const accessToken = createToken({ email, password });
 	res.status(200).json({
 		accessToken,
-		user: {
-			email,
-			id: 1,
-		},
+		user: omit(['password'], newUser),
 	});
 });
 
