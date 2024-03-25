@@ -35,6 +35,16 @@ function verifyToken(token) {
 }
 
 const middlewares = jsonServer.defaults();
+
+server.use(middlewares);
+
+server.use(jsonServer.bodyParser);
+server.use(
+	jsonServer.defaults({
+		noCors: true,
+	})
+);
+
 // Register New User
 server.post('/register', (req, res) => {
 	const { email, password, firstname, lastname } = req.body;
@@ -123,15 +133,6 @@ server.post('/login', (req, res) => {
 //     res.status(status).json({status, message})
 //   }
 // })
-server.use(middlewares);
-
-server.use(jsonServer.bodyParser);
-server.use(
-	jsonServer.defaults({
-		noCors: true,
-	})
-);
-
 // Add this before server.use(router)
 server.use(
 	jsonServer.rewriter({
