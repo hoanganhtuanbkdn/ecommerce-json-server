@@ -3,21 +3,20 @@ const jsonServer = require('json-server');
 const fs = require('fs');
 
 const server = jsonServer.create();
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
-const cors = require('cors');
+// const cors = require('cors');
 const { omit } = require('ramda');
-const corsOptions = {
-	origin: '*',
-	credentials: true, //access-control-allow-credentials:true
-	optionSuccessStatus: 200,
-};
+// const corsOptions = {
+// 	origin: '*',
+// 	credentials: true, //access-control-allow-credentials:true
+// 	optionSuccessStatus: 200,
+// };
 
 const router = jsonServer.router('./db.json');
 
-server.use(bodyParser.urlencoded({ extended: true }));
-server.use(bodyParser.json());
-server.use(jsonServer.defaults());
+// server.use(bodyParser.urlencoded({ extended: true }));
+// server.use(bodyParser.json());
 
 const SECRET_KEY = '123456789';
 
@@ -34,24 +33,6 @@ function verifyToken(token) {
 		decode !== undefined ? decode : err
 	);
 }
-
-// Check if the user exists in database
-function isAuthenticated({ email, password }) {
-	const userdb = JSON.parse(fs.readFileSync('./db.json', 'UTF-8'));
-
-	return (
-		userdb.users.findIndex(
-			(user) => user.email === email && user.password === password
-		) !== -1
-	);
-}
-// Uncomment to allow write operations
-// const fs = require('fs')
-// const path = require('path')
-// const filePath = path.join('db.json')
-// const data = fs.readFileSync(filePath, "utf-8");
-// const db = JSON.parse(data);
-// const router = jsonServer.router(db)
 
 const middlewares = jsonServer.defaults();
 // Register New User
@@ -143,13 +124,21 @@ server.post('/login', (req, res) => {
 //   }
 // })
 server.use(middlewares);
+
+server.use(jsonServer.bodyParser);
+server.use(
+	jsonServer.defaults({
+		noCors: true,
+	})
+);
+
 // Add this before server.use(router)
 server.use(
 	jsonServer.rewriter({
 		'/api/*': '/$1',
 	})
 );
-server.use(cors(corsOptions));
+// server.use(cors(corsOptions));
 server.use(router);
 server.listen(4000, () => {
 	console.log('JSON Server is running');
