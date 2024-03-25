@@ -99,10 +99,11 @@ server.post('/register', (req, res) => {
 
 // Login to one of the users from ./db.json
 server.post('/login', (req, res) => {
+	const { email, password } = req.body;
+
 	const userdb = JSON.parse(fs.readFileSync('./db.json', 'UTF-8'));
 	const newUser = userdb.users.find((user) => user.email === email);
 
-	const { email, password } = req.body;
 	if (!newUser) {
 		const status = 401;
 		const message = 'Incorrect email or password';
